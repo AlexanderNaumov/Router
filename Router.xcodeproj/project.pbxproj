@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		232F474425154F3800FCB9C9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 232F474325154F3800FCB9C9 /* Info.plist */; };
 		232F474B25154F4000FCB9C9 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474625154F4000FCB9C9 /* Routing.swift */; };
 		232F474C25154F4000FCB9C9 /* StandartRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474725154F4000FCB9C9 /* StandartRouting.swift */; };
 		232F474D25154F4000FCB9C9 /* RoutingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474825154F4000FCB9C9 /* RoutingEvent.swift */; };
@@ -133,7 +132,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				232F474425154F3800FCB9C9 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
