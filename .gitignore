@@ -1,4 +1,5 @@
 .DS_Store
+Carthage/
 Router.xcodeproj/xcuserdata
 Router.xcodeproj/project.xcworkspace/xcuserdata
 Router.xcworkspace/xcuserdata
