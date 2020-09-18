@@ -1,0 +1,6 @@
+.DS_Store
+Router.xcodeproj/xcuserdata
+Router.xcodeproj/project.xcworkspace/xcuserdata
+Router.xcworkspace/xcuserdata
+.build/
+.swiftpm/
