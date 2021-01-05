@@ -9,39 +9,41 @@
 import UIKit
 import ReStore
 
+struct OpenRouting: Action {
+    let type: RoutingType.Type
+}
+
+struct CloseRouting: Action {
+    let type: RoutingType.Type
+}
+
 public struct Router {
     
-    private static weak var store: ExecutorStore?
-    private static let allVC = NSHashTable<UIViewController>(options: .weakMemory)
+    private static weak var store: Store?
+    private static let viewControllers = NSHashTable<UIViewController>(options: .weakMemory)
     private let vc: UIViewController
     
     fileprivate init(_ vc: UIViewController) { self.vc = vc }
     
-    public static func setStore(_ store: ExecutorStore) {
+    public static func setStore(_ store: Store) {
         self.store = store
     }
     
-    public func open(_ routing: Routing, sourceTag: Routing.Tag? = nil, payload: Any? = nil, completion: ((Router) -> Void)? = nil) {
-        Router.store?.dispatch(ActionValue<Any?>(payload, Routing.Event.open(routing.event)))
+    public func open(_ routing: RoutingType, payload: Any? = nil) {
+        let routingType = type(of: routing)
+        Router.store?.dispatch(OpenRouting(type: routingType))
         let newVc = routing.controller(payload)
-        newVc.__routing = (vc, routing.event)
-        Router.allVC.add(newVc)
-        routing.open(vc, newVc, sourceTag) { completion?(Router(newVc)) }
+        newVc.__routing = (vc, routingType)
+        Router.viewControllers.add(newVc)
+        routing.open(from: vc, to: newVc)
     }
     
-    public func close(_ routing: Routing, completion: ((Router) -> Void)? = nil) {
-        Router.store?.dispatch(Action(Routing.Event.close(routing.event)))
-        for vc in Router.allVC.allObjects where vc.__routing.1.isEqual(routing.event) {
-            switch true {
-            case self.vc == vc:
-                routing.close?(vc) { if let vc = vc.__routing.0 { completion?(Router(vc)) } }
-                return
-            case self.vc == vc.__routing.0:
-                routing.close?(vc) { completion?(self) }
-                return
-            default:
-                break
-            }
+    public func close(_ routing: RoutingType) {
+        let routingType = type(of: routing)
+        Router.store?.dispatch(CloseRouting(type: routingType))
+        for vc in Router.viewControllers.allObjects where vc.__routing.1 == routingType && (self.vc == vc || self.vc == vc.__routing.0) {
+            routing.close(vc: vc)
+            return
         }
     }
 }
@@ -52,16 +54,16 @@ extension UIViewController {
     }
     private class RoutingContainer {
         weak var parent: UIViewController!
-        let event: AnyEvent
-        init(parent: UIViewController!, event: AnyEvent) { self.parent = parent; self.event = event }
+        let type: RoutingType.Type
+        init(parent: UIViewController!, type: RoutingType.Type) { self.parent = parent; self.type = type }
     }
-    fileprivate var __routing: (UIViewController?, AnyEvent) {
+    fileprivate var __routing: (UIViewController?, RoutingType.Type) {
         get {
             let obj = objc_getAssociatedObject(self, &AssociatedKeys.routingContainer) as! RoutingContainer
-            return (obj.parent, obj.event)
+            return (obj.parent, obj.type)
         }
         set {
-            let container = RoutingContainer(parent: newValue.0, event: newValue.1)
+            let container = RoutingContainer(parent: newValue.0, type: newValue.1)
             objc_setAssociatedObject(self, &AssociatedKeys.routingContainer, container, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }

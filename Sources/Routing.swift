@@ -7,83 +7,37 @@
 //
 
 import UIKit
-import ReStore
 
-public struct Routing {
-    public enum Tag {
-        case custom(Int)
-        public var value: Int {
-            switch self {
-            case let .custom(custom):
-                return custom
-            }
+public protocol RoutingType {
+    func controller(_ payload: Any?) -> UIViewController
+    func open(from: UIViewController, to: UIViewController)
+    func close(vc: UIViewController)
+}
+
+public protocol Routing: RoutingType {
+    associatedtype T
+    func controller(payload: T) -> UIViewController
+    func controller() -> UIViewController
+    func open(from: UIViewController, to: UIViewController)
+    func close(vc: UIViewController)
+}
+
+extension Routing {
+    func controller(_ payload: Any?) -> UIViewController {
+        if let payload = payload as? T {
+            return controller(payload: payload)
+        } else {
+            return controller()
         }
     }
     
-    typealias Open = (_ from: UIViewController, _ to: UIViewController, _ sourceTag: Tag?, _ completion: @escaping () -> Void) -> Void
-    public typealias OpenType = (_ from: UIViewController, _ to: UIViewController, _ sourceTag: Tag?, _ completion: @escaping () -> Void) -> Void
-    public typealias OpenType2 = (_ from: UIViewController, _ to: UIViewController, _ completion: @escaping () -> Void) -> Void
-    public typealias CloseType = (_ vc: UIViewController, _ completion: @escaping () -> Void) -> Void
-    
-    let open: Open
-    let close: CloseType?
-    let event: AnyEvent
-    let controller: (Any?) -> UIViewController
-    
-    public init<T>(_ controller: @escaping (T) -> UIViewController, open: @escaping OpenType, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = { controller($0 as! T) }
-        self.open = open
-        self.close = close
-        self.event = event
-    }
-    public init(_ controller: @escaping () -> UIViewController, open: @escaping OpenType, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = { _ in controller() }
-        self.open = open
-        self.close = close
-        self.event = event
+    func controller(payload: Void) -> UIViewController {
+        fatalError("not implemented")
     }
     
-    public init<T>(_ controller: @escaping (T) -> UIViewController, open: @escaping OpenType2, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = { controller($0 as! T) }
-        self.open = {
-            open($0, $1, $3)
-        }
-        self.close = close
-        self.event = event
-    }
-    public init(_ controller: @escaping () -> UIViewController, open: @escaping OpenType2, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = { _ in controller() }
-        self.open = {
-            open($0, $1, $3)
-        }
-        self.close = close
-        self.event = event
+    func controller() -> UIViewController {
+        fatalError("not implemented")
     }
     
-    ///
-    
-    public init(_ configure: @escaping (UIViewController) -> Void, open: @escaping OpenType2, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = { _ in
-            let vc = UIViewController()
-            configure(vc)
-            return vc
-        }
-        self.open = {
-            open($0, $1, $3)
-        }
-        self.close = close
-        self.event = event
-    }
-    public init<T>(_ configure: @escaping (UIViewController, T) -> Void, open: @escaping OpenType2, close: CloseType? = nil, event: AnyEvent) {
-        self.controller = {
-            let vc = UIViewController()
-            configure(vc, $0 as! T)
-            return vc
-        }
-        self.open = {
-            open($0, $1, $3)
-        }
-        self.close = close
-        self.event = event
-    }
+    func close(vc: UIViewController) {}
 }
