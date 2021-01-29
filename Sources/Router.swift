@@ -10,11 +10,11 @@ import UIKit
 import ReStore
 
 struct OpenRouting: Action {
-    let type: RoutingType.Type
+    let type: Routing.Type
 }
 
 struct CloseRouting: Action {
-    let type: RoutingType.Type
+    let type: Routing.Type
 }
 
 public struct Router {
@@ -29,20 +29,19 @@ public struct Router {
         self.store = store
     }
     
-    public func open(_ routing: RoutingType, payload: Any? = nil) {
+    public func open(_ routing: Routing) {
         let routingType = type(of: routing)
         Router.store?.dispatch(OpenRouting(type: routingType))
-        let newVc = routing.controller(payload)
+        let newVc = routing.controller()
         newVc.__routing = (vc, routingType)
         Router.viewControllers.add(newVc)
-        routing.open(from: vc, to: newVc)
+        routingType.open(from: vc, to: newVc)
     }
     
-    public func close(_ routing: RoutingType) {
-        let routingType = type(of: routing)
+    public func close(_ routingType: Routing.Type) {
         Router.store?.dispatch(CloseRouting(type: routingType))
         for vc in Router.viewControllers.allObjects where vc.__routing.1 == routingType && (self.vc == vc || self.vc == vc.__routing.0) {
-            routing.close(vc: vc)
+            routingType.close(vc: vc)
             return
         }
     }
@@ -54,10 +53,10 @@ extension UIViewController {
     }
     private class RoutingContainer {
         weak var parent: UIViewController!
-        let type: RoutingType.Type
-        init(parent: UIViewController!, type: RoutingType.Type) { self.parent = parent; self.type = type }
+        let type: Routing.Type
+        init(parent: UIViewController!, type: Routing.Type) { self.parent = parent; self.type = type }
     }
-    fileprivate var __routing: (UIViewController?, RoutingType.Type) {
+    fileprivate var __routing: (UIViewController?, Routing.Type) {
         get {
             let obj = objc_getAssociatedObject(self, &AssociatedKeys.routingContainer) as! RoutingContainer
             return (obj.parent, obj.type)

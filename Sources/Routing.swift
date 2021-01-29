@@ -8,36 +8,15 @@
 
 import UIKit
 
-public protocol RoutingType {
-    func controller(_ payload: Any?) -> UIViewController
-    func open(from: UIViewController, to: UIViewController)
-    func close(vc: UIViewController)
-}
-
-public protocol Routing: RoutingType {
-    associatedtype T
-    func controller(payload: T) -> UIViewController
+public protocol Routing {
     func controller() -> UIViewController
-    func open(from: UIViewController, to: UIViewController)
-    func close(vc: UIViewController)
+    static func open(from: UIViewController, to: UIViewController)
+    static func close(vc: UIViewController)
 }
 
 extension Routing {
-    func controller(_ payload: Any?) -> UIViewController {
-        if let payload = payload as? T {
-            return controller(payload: payload)
-        } else {
-            return controller()
-        }
-    }
-    
-    func controller(payload: Void) -> UIViewController {
+    static func controller() -> UIViewController {
         fatalError("not implemented")
     }
-    
-    func controller() -> UIViewController {
-        fatalError("not implemented")
-    }
-    
-    func close(vc: UIViewController) {}
+    static func close(vc: UIViewController) {}
 }
