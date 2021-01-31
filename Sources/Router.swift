@@ -30,41 +30,35 @@ public struct Router {
     }
     
     public func open(_ routing: Routing) {
-        let routingType = type(of: routing)
-        Router.store?.dispatch(OpenRouting(type: routingType))
+        Router.store?.dispatch(OpenRouting(type: type(of: routing)))
         let newVc = routing.controller()
-        newVc.__routing = (vc, routingType)
+        newVc.__routingContainer = RoutingContainer(parent: vc, routing: routing)
         Router.viewControllers.add(newVc)
-        routingType.open(from: vc, to: newVc)
+        routing.open(from: vc, to: newVc)
     }
     
     public func close(_ routingType: Routing.Type) {
-        Router.store?.dispatch(CloseRouting(type: routingType))
-        for vc in Router.viewControllers.allObjects where vc.__routing.1 == routingType && (self.vc == vc || self.vc == vc.__routing.0) {
-            routingType.close(vc: vc)
+        for vc in Router.viewControllers.allObjects where type(of: vc.__routingContainer.routing) == routingType && (self.vc == vc || self.vc == vc.__routingContainer.parent) {
+            Router.store?.dispatch(CloseRouting(type: routingType))
+            vc.__routingContainer.routing.close(vc: vc)
             return
         }
     }
+}
+
+private class RoutingContainer {
+    weak var parent: UIViewController!
+    let routing: Routing
+    init(parent: UIViewController!, routing: Routing) { self.parent = parent; self.routing = routing }
 }
 
 extension UIViewController {
     private struct AssociatedKeys {
         static var routingContainer: UInt8 = 0
     }
-    private class RoutingContainer {
-        weak var parent: UIViewController!
-        let type: Routing.Type
-        init(parent: UIViewController!, type: Routing.Type) { self.parent = parent; self.type = type }
-    }
-    fileprivate var __routing: (UIViewController?, Routing.Type) {
-        get {
-            let obj = objc_getAssociatedObject(self, &AssociatedKeys.routingContainer) as! RoutingContainer
-            return (obj.parent, obj.type)
-        }
-        set {
-            let container = RoutingContainer(parent: newValue.0, type: newValue.1)
-            objc_setAssociatedObject(self, &AssociatedKeys.routingContainer, container, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
+    fileprivate var __routingContainer: RoutingContainer {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.routingContainer) as! RoutingContainer }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.routingContainer, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     public var router: Router { return Router(self) }
 }

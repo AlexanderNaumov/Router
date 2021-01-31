@@ -10,13 +10,10 @@ import UIKit
 
 public protocol Routing {
     func controller() -> UIViewController
-    static func open(from: UIViewController, to: UIViewController)
-    static func close(vc: UIViewController)
+    func open(from: UIViewController, to: UIViewController)
+    func close(vc: UIViewController)
 }
 
 extension Routing {
-    static func controller() -> UIViewController {
-        fatalError("not implemented")
-    }
-    static func close(vc: UIViewController) {}
+    func close(vc: UIViewController) {}
 }
