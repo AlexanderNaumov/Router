@@ -3,26 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11A61D0025CDBEBE0069A982 /* ReStore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11A61CFF25CDBEBE0069A982 /* ReStore.xcframework */; };
 		232F474B25154F4000FCB9C9 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474625154F4000FCB9C9 /* Routing.swift */; };
 		232F474C25154F4000FCB9C9 /* StandartRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474725154F4000FCB9C9 /* StandartRouting.swift */; };
 		232F474D25154F4000FCB9C9 /* RoutingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474825154F4000FCB9C9 /* RoutingEvent.swift */; };
 		232F474E25154F4000FCB9C9 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474925154F4000FCB9C9 /* Router.swift */; };
 		232F474F25154F4000FCB9C9 /* UINavigationController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F474A25154F4000FCB9C9 /* UINavigationController+Completion.swift */; };
-		232F47BF25155CD500FCB9C9 /* ReStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F47BE25155CD500FCB9C9 /* ReStore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11A61CFF25CDBEBE0069A982 /* ReStore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ReStore.xcframework; path = Carthage/Build/ReStore.xcframework; sourceTree = "<group>"; };
 		232F474325154F3800FCB9C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		232F474625154F4000FCB9C9 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Routing.swift; path = Sources/Routing.swift; sourceTree = "<group>"; };
 		232F474725154F4000FCB9C9 /* StandartRouting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StandartRouting.swift; path = Sources/StandartRouting.swift; sourceTree = "<group>"; };
 		232F474825154F4000FCB9C9 /* RoutingEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoutingEvent.swift; path = Sources/RoutingEvent.swift; sourceTree = "<group>"; };
 		232F474925154F4000FCB9C9 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Router.swift; path = Sources/Router.swift; sourceTree = "<group>"; };
 		232F474A25154F4000FCB9C9 /* UINavigationController+Completion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UINavigationController+Completion.swift"; path = "Sources/UINavigationController+Completion.swift"; sourceTree = "<group>"; };
-		232F47BE25155CD500FCB9C9 /* ReStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReStore.framework; path = Carthage/Build/iOS/ReStore.framework; sourceTree = "<group>"; };
 		2341A8F025140C08008BAD37 /* Router.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Router.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -31,7 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				232F47BF25155CD500FCB9C9 /* ReStore.framework in Frameworks */,
+				11A61D0025CDBEBE0069A982 /* ReStore.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,7 +54,7 @@
 		232F47BD25155CD500FCB9C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				232F47BE25155CD500FCB9C9 /* ReStore.framework */,
+				11A61CFF25CDBEBE0069A982 /* ReStore.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -113,7 +113,7 @@
 		2341A8E725140C08008BAD37 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					2341A8EF25140C08008BAD37 = {
 						CreatedOnToolsVersion = 12.0;
@@ -296,10 +296,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -327,10 +323,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
