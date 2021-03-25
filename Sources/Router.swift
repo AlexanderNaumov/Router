@@ -9,11 +9,15 @@
 import UIKit
 import ReStore
 
-struct OpenRouting: Action {
+public protocol RoutingAction {
+    var type: Routing.Type { get }
+}
+
+struct OpenRouting: Action, RoutingAction {
     let type: Routing.Type
 }
 
-struct CloseRouting: Action {
+struct CloseRouting: Action, RoutingAction {
     let type: Routing.Type
 }
 
