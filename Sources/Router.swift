@@ -13,11 +13,11 @@ public protocol RoutingAction {
     var type: Routing.Type { get }
 }
 
-struct OpenRouting: Action, RoutingAction {
+struct OpenRouting: ActionType, RoutingAction {
     let type: Routing.Type
 }
 
-struct CloseRouting: Action, RoutingAction {
+struct CloseRouting: ActionType, RoutingAction {
     let type: Routing.Type
 }
 
